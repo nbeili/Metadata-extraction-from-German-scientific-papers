@@ -52,14 +52,14 @@ def main():
     doc = fitz.open("11448.pdf")
     page = doc[1] # we only consider the first page of the document
 
-    author_1 = textfrompdf(page,207.0, 199.0,96.0,16.0,0)
-    author_2 = textfrompdf(page, 127.0,220.0,259.0,78.0)
+    author = textfrompdf(page,207.0, 199.0,96.0,16.0,0)
+    title = textfrompdf(page, 127.0,220.0,259.0,78.0)
     affiliation = textfrompdf(page, 344.0,420.0,48.0,18.0)
     date = textfrompdf(page, 149.0,470.0,239.0,18.0)
     journal = textfrompdf(page, 256.0,551.0,132.0,16.0)
     ju = textfrompdf(page, 134.0, 714.0, 169.0, 18.0)
 
-    print("Title: {}\nAuthor: {}\naffiliation: {}\ndate: {}\njournal: {}\njournal: {}".format(author_1,author_2,affiliation,date,journal,ju))
+    print("Author: {}\nAuthor: {}\naffiliation: {}\ndate: {}\njournal: {}\njournal: {}".format(author,title,affiliation,date,journal,ju))
 
     print("\n")
     rl1 = page.searchFor("Wissenschaftszentrum")
