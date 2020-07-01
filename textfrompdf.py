@@ -20,6 +20,7 @@ def textfrompdf(page, x_upper_left, y_upper_left, width, height, margin=0.0):
     #####################################
     # SOME OF OUR MANUAL ANNOTATIONS ARE INACCURATE --> add a margin to include all text that we want
     # we should think about removing this if our annotations are correct
+    #####################################
     margin = 3
 
     #specify the conversion rates for x and y cordinates
