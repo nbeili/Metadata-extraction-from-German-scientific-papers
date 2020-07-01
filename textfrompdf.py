@@ -17,13 +17,18 @@ def textfrompdf(page, x_upper_left, y_upper_left, width, height, margin=0.0):
         String --> the words contained inside the bbox
     """
     # Define the rectangle
+    #####################################
+    # SOME OF OUR MANUAL ANNOTATIONS ARE INACCURATE --> add a margin to include all text that we want
+    # we should think about removing this if our annotations are correct
+    margin = 3
+
     #specify the conversion rates for x and y cordinates
-    x_conversion = 1
-    y_conversion = 1
-    x_upper_left = x_upper_left * x_conversion
-    y_upper_left = y_upper_left * y_conversion
-    x_right = x_upper_left + width 
-    y_right = y_upper_left + height
+    x_conversion = float(page.rect.width / 596)
+    y_conversion = float(page.rect.height / 794)
+    x_upper_left = (x_upper_left * x_conversion) - margin
+    y_upper_left = (y_upper_left * y_conversion) - margin
+    x_right = x_upper_left + (width * x_conversion) + margin
+    y_right = y_upper_left + (height * y_conversion) + margin
     rect = fitz.Rect(x_upper_left,y_upper_left,x_right, y_right)
 
     """
@@ -38,8 +43,8 @@ def textfrompdf(page, x_upper_left, y_upper_left, width, height, margin=0.0):
     words.sort(key=lambda w: (w[3], w[0])) # ascending y, then x coordinate
 
     # sub-select only words that are contained INSIDE the rectangle
-    mywords = [w for w in words if fitz.Rect(w[:4]).intersects(rect)]
-    #mywords = [w for w in words if fitz.Rect(w[:4]) in rect]
+    #mywords = [w for w in words if fitz.Rect(w[:4]).intersects(rect)]
+    mywords = [w for w in words if fitz.Rect(w[:4]) in rect]
     group = groupby(mywords, key=lambda w: w[3])
     
     text = ""
@@ -59,11 +64,11 @@ def main():
     journal = textfrompdf(page, 256.0,551.0,132.0,16.0)
     ju = textfrompdf(page, 134.0, 714.0, 169.0, 18.0)
 
-    print("Author: {}\nAuthor: {}\naffiliation: {}\ndate: {}\njournal: {}\njournal: {}".format(author,title,affiliation,date,journal,ju))
-
+    print("Author: {}\nTitle: {}\nDate: {}\nAffiliation: {}\nE-Mail: {}\nAddress: {}".format(author,title,affiliation,date,journal,ju))
+"""
     print("\n")
-    rl1 = page.searchFor("Wissenschaftszentrum")
-    rl2 = page.searchFor("Sozialforschung")
+    rl1 = page.searchFor("Philip")
+    rl2 = page.searchFor("Wotschack")
     rect = rl1[0] | rl2[0]
     
     words = page.getText("words") # list of words on the page
@@ -77,7 +82,7 @@ def main():
     for y1, gwords in group:
         print(" ".join(w[4] for w in gwords))  # one line
     print(rect)
-
+"""
 
 if __name__ == "__main__":
     main()
