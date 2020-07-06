@@ -1,5 +1,5 @@
 
-Execute the script files according to their sequence. Whole process consists of 5 arslanzafar95/MLA steps:
+Execute the script files according to this sequence:
 
 1). Extract data from DBLP. Use DBLP.xml file (link mentioned in code). Use portion of this xml file, and parse it to get the dataframe with all required metadata fields
 
