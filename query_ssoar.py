@@ -5,6 +5,7 @@ from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 import json
 import time
+import progressbar
 
 def crawl_ssoar_metadata(id):
     """
@@ -47,15 +48,17 @@ def crawl_ssoar_metadata(id):
 
 
 def main():
-    ids = range(1200,1000000)
-    
+    ids = range(1533,200000)
+    bar = progressbar.ProgressBar(maxval=200000, widgets=[progressbar.Bar('=','[',']'), ' ', progressbar.Percentage()])
+    bar.start()
     with open('ssoar_metadata.txt', 'w') as file:
         for id in ids:
             metadata = crawl_ssoar_metadata(id)
             if metadata != None:
                 file.write(json.dumps(metadata))
+            bar.update(id+1)
             time.sleep(5)    
-
+    bar.finish()
 if __name__ == "__main__":
     main()
 
