@@ -36,7 +36,10 @@ def crawl_ssoar_metadata(id):
         bibtex_html = soup.find("pre", {"id": "citation_content"}).text
         
         bibtex_str = bibtexparser.loads(bibtex_html)
-        return bibtex_str.entries[0]
+        result = None
+        if len(bibtex_str.entries) >= 1:
+            result = bibtex_str.entries[0]
+        return result
 
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)
@@ -44,14 +47,14 @@ def crawl_ssoar_metadata(id):
 
 
 def main():
-    ids = range(1000000)
+    ids = range(1200,1000000)
     
     with open('ssoar_metadata.txt', 'w') as file:
         for id in ids:
             metadata = crawl_ssoar_metadata(id)
             if metadata != None:
                 file.write(json.dumps(metadata))
-            time.sleep(1)    
+            time.sleep(5)    
 
 if __name__ == "__main__":
     main()
