@@ -11,3 +11,6 @@ with data from your dataframe. This will generate docx files for new generated d
 3). Then Convert PDFs to images and resize them
 
 4). Annotate images. If image is not annotated, you may need to check whether the bounding boxes list, coordinates_author list, coordinates_title list and so on are empyty or not. 
+
+
+P.S. "dataframe_engabstract" has abstracts with english translations while "dataframe_gerabstract" has only german abstracts
