@@ -77,7 +77,7 @@ class labelme2coco(object):
         annotation["segmentation"] = [list(np.asarray(points).flatten())]
         annotation["iscrowd"] = 0
         annotation["area"] = area
-        annotation["image_id"] = num
+        annotation["image_id"] = nu m
 
         annotation["bbox"] = list(map(float, self.getbbox(points)))
 
