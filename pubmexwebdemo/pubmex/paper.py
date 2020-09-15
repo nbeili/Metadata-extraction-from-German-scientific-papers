@@ -303,6 +303,9 @@ class Paper:
       """
         merge rectangles if they have the same class label and are close to each other
       """
+      rectangles = self.rectangles.copy()
+      # order the rectangles by the y coordinate of the bounding box's top left corner
+      rectangles.sort(key = lambda rect: retc[1])
       for key, val in self.rectangles.items():
         if len(val) > 1:
           new_rect = None
@@ -315,7 +318,8 @@ class Paper:
             print(relative_distance_y, key)
             relative_distance_x1 = abs(b[0]/self.image.width - a[0]/self.image.width)
 
-            if relative_distance_y < 0.1 and relative_distance_x1 < 0.2:
+            #check if the rectangles are close to each other and there is no other rectangle between them
+            if relative_distance_y < 0.1 and relative_distance_x1 < 0.2 and abs(rectangles.index(a) - rectangles.index(b)) == 1:
               # merge the two rectangles
               new_rect = fitz.Rect(min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
               merged = True
