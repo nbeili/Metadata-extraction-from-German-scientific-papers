@@ -15,11 +15,9 @@ from io import BytesIO
 
 import json
 
-from itertools import groupby
+from itertools import groupby, chain, combinations
 import math
 from collections import Counter
-
-from itertools import combinations
 
 from string import punctuation, digits, whitespace
 
@@ -280,6 +278,8 @@ class Paper:
           self.rectangles[class_name].append(fitz.Rect(bbox[0], bbox[1], bbox[2], bbox[3]))
       self.post_process_rectangles()
       for key, val in self.rectangles.items():
+        # sort the rectangles from top to bottom
+        val = sorted(val, key=lambda rect: rect[1])
         if type(val) != list:
           val = [val]
         for v in val:
@@ -287,7 +287,7 @@ class Paper:
           if not key in metadata.keys():
             metadata[key] = text
           else:
-                metadata[key] += "/--/" + text
+                metadata[key] += "\n" + text
       """      text = self.get_text_from_bbox(bbox[0], bbox[1], bbox[2], bbox[3], class_name, conversion=True,margin=margin, use_fitz=use_fitz)
             if not class_name in scores.keys(): #or scores[class_name] < fields["scores"].item():
               # get the text  
@@ -303,24 +303,24 @@ class Paper:
       """
         merge rectangles if they have the same class label and are close to each other
       """
-      rectangles = self.rectangles.copy()
-      # order the rectangles by the y coordinate of the bounding box's top left corner
-      rectangles.sort(key = lambda rect: retc[1])
       for key, val in self.rectangles.items():
         if len(val) > 1:
           new_rect = None
           merged = False
           # compare each rectangle with each other rectangle
-          print(list(combinations(val,2)))
           for a, b in combinations(val, 2):
             new_rect = None
             relative_distance_y = abs(b[3]/self.image.height - a[1]/self.image.height)
-            print(relative_distance_y, key)
             relative_distance_x1 = abs(b[0]/self.image.width - a[0]/self.image.width)
 
             #check if the rectangles are close to each other and there is no other rectangle between them
+            rectangles = self.rectangles.copy()
+            # order the rectangles by the y coordinate of the bounding box's top left corner
+            rectangles = sorted([rect for rects in rectangles.values() for rect in rects], key=lambda rect: rect[1])
             if relative_distance_y < 0.1 and relative_distance_x1 < 0.2 and abs(rectangles.index(a) - rectangles.index(b)) == 1:
               # merge the two rectangles
+              print(key)
+              print(abs(rectangles.index(a) - rectangles.index(b)))
               new_rect = fitz.Rect(min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
               merged = True
               #new_rects.append(new_rect)
