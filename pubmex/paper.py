@@ -46,27 +46,41 @@ class RectangleError(Exception):
         self.errors = errors
 
 class Paper:
-    
+    """
+    A wrapper for PDF documents to be used in MexPub to automatically extract metadata. 
+    """
     def __init__(self, filename, metadata_dict, metadata_page=0):
-        
+        """
+        :param filename: path to the pdf document
+        :param metadata_dict: a dictionary with the metadata if it is already known (i.e., the PDF should be annotated based on the metadata). Keys are the classnames, values are the metadata text.
+        :param metadata_page: specifies the page of the PDF from which the metadata should be extracted. Defaults to zero.
+        """
         self.filename = filename
         self.image = self.to_image()
         self.metadata = metadata_dict
         self.rectangles = {}
         self.annotations = []
+        self.metadata_page = metadata_page
         
     def __str__(self):
         return self.filename
     
-    def to_image(self,):
-        img = convert_from_path(self.filename)[0]
+    def to_image(self):
+        img = convert_from_path(self.filename)[self.metadata_page]
         return img
     
     def resize_image(self, width=569, height=794):
+        """
+        :param width: indicates the width the resized image should have
+        :param height: indicates the height the resized image should have
+        """
         self.image = self.image.resize((width, height))
         
     
     def save_image(self,output_path=""):
+      """
+      :param output_path: sepcifies the path to which the image is saved
+      """
         reg = re.compile("[^/]+$")
         img_name = re.search(reg, self.filename)[0][:-4] + ".jpeg"
         if len(output_path) != 0 and output_path[-1] != "/":
@@ -74,6 +88,9 @@ class Paper:
         self.image.save(output_path + img_name)
         
     def get_metadata_items(self, metadata_df):
+      """
+      :param metadata_df: a pandas DataFrame containing the metadata for a given PDF
+      """
         reg = re.compile("[^/]+$")
         instance = re.search(reg, self.filename)[0][:-4] + ".docx"
         
@@ -84,7 +101,7 @@ class Paper:
     def bbox_from_text(self):
         # get the first page
         doc = fitz.open(self.filename)
-        page = doc[0]
+        page = doc[self.metadata_page]
         
         if list(self.metadata.values())[0] == "":
             raise MetadataError("No metadata values specified. Run method get_metadata_items(metadata_df) before callsing this method.", "")
@@ -148,7 +165,7 @@ class Paper:
             raise RectangleError("No rectangles available. Run method bbox_from_text(self) before calling this method.", "")
         
         doc = fitz.open(self.filename)
-        page = doc[0]
+        page = doc[self.metadata_page]
         
         version = "4.4.0"
         flags = {}
@@ -209,6 +226,9 @@ class Paper:
         return annotations
     
     def save_annotations(self, output_path=""):
+        """
+        :param output_path: specifies the folder to which the annotations are saved. 
+        """
         if len(self.annotations) == 0:
             self.get_annotations()
         
@@ -221,9 +241,18 @@ class Paper:
             json.dump(self.annotations, f)
             
     def get_text_from_bbox(self, x_upper_left, y_upper_left, x_lower_right, y_lower_right, class_name, conversion=False, margin=0, use_fitz=True):
-        
+        """
+        :param x_upper_left: X coordinate of the bounding box's upper left corner
+        :param y_upper_left: Y coordinate of the bounding box's upper left corner
+        :param x_lower_right: X coordinate of the bounding box's lower right corner
+        :param y_lower_right: Y coordinate of the bounding box's lower right corner
+        :param class_name: specifies the class name of the given bounding box (e.g., title)
+        :param conversion: specifies whether the coordinates of the bounding box have to be converted to match the PDF document's size
+        :param margin: specifies whether a margin should be added to the bounding box when extracting the text
+        :param use_fitz: specifies whether the method uses the fitz-library to extract the text. If set to False, the method uses pdfplumber
+        """
         doc = fitz.open(self.filename)
-        page = doc[0]
+        page = doc[self.metadata_page]
         if conversion:
           x_conversion = float(page.rect.width / self.image.width)
           y_conversion = float(page.rect.height / self.image.height)
@@ -252,7 +281,7 @@ class Paper:
 
         else: 
           with pdfplumber.open(self.filename) as pdf:
-            first_page = pdf.pages[0]
+            first_page = pdf.pages[self.metadata_page]
             text = first_page.crop((x_upper_left, y_upper_left, x_lower_right, y_lower_right)).extract_text(x_tolerance=margin, y_tolerance=margin)
             if text is None:
               text = self.get_text_from_bbox(x_upper_left, y_upper_left, x_lower_right, y_lower_right, class_name, conversion=False, margin=margin, use_fitz=True)
@@ -262,6 +291,12 @@ class Paper:
         return text
 
     def get_text_from_detectron2_outputs(self, detectron2_instances, metadataCatalog, margin=0, use_fitz=True):
+      """
+      :param detectron2_instances: a Tensor object, i.e., the instances output by the MexPub predictor
+      :param metadataCatalog: the detectron2 metadata catalog registered to infer the class names
+      :param margin: specifies the margin to be added to the bounding boxes when extracting the text
+      :param use_fitz: specifies whether the method uses the fitz-library to extract the text. If set to False, the method uses pdfplumber
+      """
       if len(detectron2_instances) == 0:
         print("No instances detected.")
         return
@@ -392,6 +427,10 @@ class Paper:
     
 # helper_functions to compute cosine similarity between two strings
 def get_cosine(vec1, vec2):
+    """
+    :param vec1: the first vector
+    :param vec2: the second vector
+    """
     intersection = set(vec1.keys()) & set(vec2.keys())
     numerator = sum([vec1[x] * vec2[x] for x in intersection])
 
@@ -406,12 +445,19 @@ def get_cosine(vec1, vec2):
 
 
 def text_to_vector(text):
+    """
+    :param text: a string that should be converted to a vector
+    """
     word = re.compile(r'\w+')
     words = word.findall(text)
     return Counter(words)
 
 
 def get_cosine_similarity(content_a, content_b):
+    """
+    :param content_a: string
+    :param content_b: string
+    """
     text1 = content_a
     text2 = content_b
 
