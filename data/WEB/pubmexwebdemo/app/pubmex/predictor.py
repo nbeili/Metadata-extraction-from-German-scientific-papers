@@ -1,18 +1,15 @@
 import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.data import (
-   MetadataCatalog,
-   build_detection_test_loader,
-   build_detection_train_loader,
-)
-from detectron2.data import (
-    MetadataCatalog
+    MetadataCatalog,
+    build_detection_test_loader,
+    build_detection_train_loader,
 )
 from detectron2.evaluation import (
-   DatasetEvaluator,
-   inference_on_dataset,
-   print_csv_format,
-   verify_results,
+    DatasetEvaluator,
+    inference_on_dataset,
+    print_csv_format,
+    verify_results,
 )
 from detectron2.modeling import build_model
 from detectron2.solver import build_lr_scheduler, build_optimizer
@@ -24,10 +21,9 @@ from detectron2.utils.logger import setup_logger
 from detectron2.config import get_cfg
 
 import torch, torchvision
-import torch
 
 
-from google.colab.patches import cv2_imshow
+#from google.colab.patches import cv2_imshow
 import cv2
 from detectron2.utils.visualizer import ColorMode, Visualizer
 import itertools

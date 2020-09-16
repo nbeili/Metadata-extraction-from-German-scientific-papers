@@ -57,13 +57,19 @@ WORKDIR /home/appuser/detectron2_repo
 
 COPY ./requirements.txt /requirements.txt
 COPY . .
+COPY ./app/static ./app/static
+RUN sudo chown -R appuser ./app
+RUN mkdir -p ./app/uploads
+#RUN chown appuser ./app/uploads
+RUN sudo apt-get update
+RUN sudo apt-get install poppler-utils -y
 RUN pip install -r /requirements.txt
 
 #docker run -it b1c1e712fa5d /bin/bash ---bash in docker image
-#CMD [ "python3", "./app/main.py" ]
-#EXPOSE 80
-
+CMD [ "python3", "./app/main.py" ]
 EXPOSE 5000
 
-ENTRYPOINT [ "python3" ]
-CMD ["./app/main.py" ]
+#EXPOSE 5000
+
+#ENTRYPOINT [ "python3" ]
+#CMD ["./app/main.py" ]

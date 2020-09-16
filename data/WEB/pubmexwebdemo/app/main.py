@@ -11,6 +11,8 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.secret_key = os.urandom(24)
 
 pubmex = PubMexInference(
     model_dump='/home/appuser/detectron2_repo/app/models/final/model_final.pth', 
@@ -38,8 +40,6 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            print("Prantik======")
-            print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename)
             img = Image.fromarray(v.get_image()[:, :, ::-1])
@@ -47,7 +47,7 @@ def upload_file():
             img.save(img_path)
             output = {}
             output["output"] = metadata
-            output["image_path"] = img_path
+            output["image_path"] = "/static/"+ filename[:-4] + ".jpg"
             return Response(json.dumps(output), mimetype='text/json')
     
     return render_template("index.html")
@@ -60,7 +60,7 @@ def uploaded_file(filename):
 def delete_file(filename):
     print("remove file")
     os.remove(app.config['UPLOAD_FOLDER'] + filename)
-    os.remove("static/" + filename[:-4] + ".jpg")
+    os.remove("/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg")
 
     return redirect(url_for('upload_file', filename=filename))
 

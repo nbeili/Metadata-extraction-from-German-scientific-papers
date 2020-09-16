@@ -28,7 +28,6 @@ class PubMexInference:
             ]
 
         self.cfg = get_cfg()
-        print(config_file)
         self.cfg.merge_from_file(config_file)
         self.cfg.MODEL.WEIGHTS = model_dump
         self.cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = confidence_threshold
