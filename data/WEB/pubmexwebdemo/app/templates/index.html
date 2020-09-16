@@ -5,6 +5,7 @@
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer/sticky-footer.css"> -->
   <link rel="stylesheet" type="text/css" href="static/style.css"/>
   <script src="static/jquery-3.4.1.min.js"></script>
   <script src="static/jquery.autocomplete.js"></script>
@@ -41,7 +42,7 @@
                 <input class="custom-file-input" name="file" type="file">
               </div>
             </div>
-            <button class="btn btn-outline-primary" id="upload-file-btn" type="button">Predict</button>
+            <button class="btn btn-outline-primary geekyBtn" id="upload-file-btn" type="button">Predict</button>
           </form>
       </div>
     </div>
@@ -49,19 +50,20 @@
 
     <!-- main content -->
     <div class="overlay"></div>
-    <div class="container" id="main-panel">
+    <div class="geekyContainer" id="main-panel">
 
       <h5><span id="name"><span id="file_name"></span></span></h5>
       <div class="row">
 
         <!-- image -->
-        <div class="col-12 col-md-6">
+        <div class="col-md-6">
           <p id="displayfilename">Please upload a PDF document above to try out MexPub!</p>
-          <img id="img" src="./static/placeholder.png">
+           <!-- <img id="img" src="./static/placeholder.png"> -->
+           <img id="img" src="">
         </div>
 
         <!-- prediction visualization -->
-        <div class="col-12 col-md-6" id="prediction-panel">
+        <div class="col-md-6" id="prediction-panel">
 
           <!-- tabs -->
           <ul class="nav nav-tabs" id="predictionTabs" role="tablist">
@@ -71,9 +73,9 @@
             <li class="nav-item">
               <a class="nav-link" id="json-tab" data-toggle="tab" href="#json" role="tab" aria-controls="json" aria-selected="false">JSON</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" id="bibtex-tab" data-toggle="tab" href="#bibtex" role="tab" aria-controls="bibtex" aria-selected="false">BibTex</a>
-            </li>
+            </li> -->
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="plaintext" role="tabpanel" aria-labelledby="plaintext-tab">
@@ -151,5 +153,13 @@
       </div>
 
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        <span class="text-muted">© 2020 Copyright: Geeky</span>
+      </div>
+    </footer>
+    <!-- Footer -->
    
 </body>
