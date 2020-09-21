@@ -7,11 +7,8 @@ from pdf2image.exceptions import (
 
 import re
 
-<<<<<<< HEAD
 from dateparser.search import search_dates
 
-=======
->>>>>>> 83d4b689b4b9b66e327a6e762aa1c9ca4252ee6f
 import fitz
 
 import base64
