@@ -403,16 +403,12 @@ class Paper:
       elif class_name == "date":
         #strip punctuation and whitespace
         self.metadata["date"] = str(self.metadata[class_name]).strip(punctuation + whitespace)
-<<<<<<< HEAD
         try:
           self.metadata["date"] = search_dates(self.metadata["date"])[0][0]
           print(self.metadata["date"])
         except:
           pass
         
-=======
-
->>>>>>> 83d4b689b4b9b66e327a6e762aa1c9ca4252ee6f
       elif class_name == "email":
         regex = r'([\w0-9._-]+@[\w0-9._-]+\.[\w0-9_-]+)'
         self.metadata["email"] = ";".join(re.findall(regex, str(self.metadata[class_name]), re.M|re.I))
