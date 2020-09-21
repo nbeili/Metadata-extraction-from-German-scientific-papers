@@ -6,13 +6,8 @@ import time
 
 from pubmex.pubmexinference import *
 
-<<<<<<< HEAD
 UPLOAD_FOLDER = './static/'
 ALLOWED_EXTENSIONS = {'pdf'}
-=======
-UPLOAD_FOLDER = '/home/appuser/detectron2_repo/app/uploads/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
->>>>>>> 83d4b689b4b9b66e327a6e762aa1c9ca4252ee6f
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -20,13 +15,8 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
 
 pubmex = PubMexInference(
-<<<<<<< HEAD
     model_dump='./models/final/model_final.pth', 
     config_file='./configs/final/train_config.yaml',
-=======
-    model_dump='/home/appuser/detectron2_repo/app/models/final/model_final.pth', 
-    config_file='/home/appuser/detectron2_repo/app/configs/final/train_config.yaml',
->>>>>>> 83d4b689b4b9b66e327a6e762aa1c9ca4252ee6f
     use_cuda=False,
     )
 
@@ -51,7 +41,6 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-<<<<<<< HEAD
             v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename, margin=4)
             img = Image.fromarray(v.get_image()[:, :, ::-1])
             img_path = "./static/" + filename[:-4] + ".jpg"
@@ -59,15 +48,6 @@ def upload_file():
             output = {}
             output["output"] = metadata
             output["image_path"] = "./static/"+ filename[:-4] + ".jpg"
-=======
-            v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename)
-            img = Image.fromarray(v.get_image()[:, :, ::-1])
-            img_path = "/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg"
-            img.save(img_path)
-            output = {}
-            output["output"] = metadata
-            output["image_path"] = "/static/"+ filename[:-4] + ".jpg"
->>>>>>> 83d4b689b4b9b66e327a6e762aa1c9ca4252ee6f
             return Response(json.dumps(output), mimetype='text/json')
     
     return render_template("index.html")
@@ -80,11 +60,7 @@ def uploaded_file(filename):
 def delete_file(filename):
     print("remove file")
     os.remove(app.config['UPLOAD_FOLDER'] + filename)
-<<<<<<< HEAD
     os.remove("./static/" + filename[:-4] + ".jpg")
-=======
-    os.remove("/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg")
->>>>>>> 83d4b689b4b9b66e327a6e762aa1c9ca4252ee6f
 
     return redirect(url_for('upload_file', filename=filename))
 
