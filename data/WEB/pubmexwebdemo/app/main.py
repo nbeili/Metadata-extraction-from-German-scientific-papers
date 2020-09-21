@@ -6,8 +6,8 @@ import time
 
 from pubmex.pubmexinference import *
 
-UPLOAD_FOLDER = '/home/appuser/detectron2_repo/app/uploads/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = './static/'
+ALLOWED_EXTENSIONS = {'pdf'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -15,8 +15,8 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
 
 pubmex = PubMexInference(
-    model_dump='/home/appuser/detectron2_repo/app/models/final/model_final.pth', 
-    config_file='/home/appuser/detectron2_repo/app/configs/final/train_config.yaml',
+    model_dump='./models/final/model_final.pth', 
+    config_file='./configs/final/train_config.yaml',
     use_cuda=False,
     )
 
@@ -41,13 +41,13 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename)
+            v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename, margin=4)
             img = Image.fromarray(v.get_image()[:, :, ::-1])
-            img_path = "/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg"
+            img_path = "./static/" + filename[:-4] + ".jpg"
             img.save(img_path)
             output = {}
             output["output"] = metadata
-            output["image_path"] = "/static/"+ filename[:-4] + ".jpg"
+            output["image_path"] = "./static/"+ filename[:-4] + ".jpg"
             return Response(json.dumps(output), mimetype='text/json')
     
     return render_template("index.html")
@@ -60,7 +60,7 @@ def uploaded_file(filename):
 def delete_file(filename):
     print("remove file")
     os.remove(app.config['UPLOAD_FOLDER'] + filename)
-    os.remove("/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg")
+    os.remove("./static/" + filename[:-4] + ".jpg")
 
     return redirect(url_for('upload_file', filename=filename))
 

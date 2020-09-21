@@ -7,6 +7,8 @@ from pdf2image.exceptions import (
 
 import re
 
+from dateparser.search import search_dates
+
 import fitz
 
 import base64
@@ -398,7 +400,12 @@ class Paper:
       elif class_name == "date":
         #strip punctuation and whitespace
         self.metadata["date"] = str(self.metadata[class_name]).strip(punctuation + whitespace)
-
+        try:
+          self.metadata["date"] = search_dates(self.metadata["date"])[0][0]
+          print(self.metadata["date"])
+        except:
+          pass
+        
       elif class_name == "email":
         regex = r'([\w0-9._-]+@[\w0-9._-]+\.[\w0-9_-]+)'
         self.metadata["email"] = ";".join(re.findall(regex, str(self.metadata[class_name]), re.M|re.I))
