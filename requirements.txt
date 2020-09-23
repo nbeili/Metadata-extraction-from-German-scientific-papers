@@ -1,6 +1,0 @@
-setuptools
-cython
-torch==1.5 -f https://download.pytorch.org/whl/cu101/torch_stable.html
-torchvision==0.6 -f https://download.pytorch.org/whl/cu101/torch_stable.html
-pyyaml==5.1
-git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
