@@ -135,7 +135,7 @@ body.loading .overlay{
 	margin-top: -15px;
 }
 
-body > *:not(#loader) .blurBackground{
+.blurBackground{
 	filter: blur(3px);
   }
 

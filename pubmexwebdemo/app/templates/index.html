@@ -52,10 +52,10 @@
     </nav>
 
     <!-- main content -->
-    <!-- <div id="loader" style="display: none;"></div> -->
+    <div id="loader" style="display: none;"></div>
     <div class="overlay"></div>
     <div class="geekyContainer" id="main-panel">
-      <div id="loader" style="display: none;"></div>
+      <!-- <div id="loader" style="display: none;"></div> -->
 
       <!-- <h5><span id="name"><span id="file_name"></span></span></h5> -->
       <!-- <div class="description"><p id="displayfilename">A project by team Geeky. <br/>
@@ -163,7 +163,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <div class="row">
+      <div class="row" id="footerRow">
         <div class="col-12 col-md-12"  id="about">
           <p>
             MexPub is a deep learning system that extracts metadata from PDF documents of scientific publications. Please note that this web demo uses a CPU to make inferences on a given PDF, which can take a few seconds. For faster inference (i.e., less than 100ms), the predictor can be called usinig a GPU. To learn more, please see our <a href="https://github.com/nbeili/Metadata-extraction-from-German-scientific-papers">open-source Python code-base</a>

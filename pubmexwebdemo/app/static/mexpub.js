@@ -32,8 +32,9 @@ $(document).ready(function(){
                 cache: false,
                 processData: false,
                 beforeSend:function(){
-                    $('body').addClass('blurBackground');
-                    //$(loader).addClass('unBlur').show();
+                    $('nav').addClass('blurBackground');
+                    $('.geekyContainer').addClass('blurBackground');
+                    $(footerRow).addClass('blurBackground');
                     $(loader).show();
                 },
                 success: function(data) {
@@ -45,7 +46,9 @@ $(document).ready(function(){
                         $("#displayfilename").html("No metadata for " + filename + ". Please validate the PDF file.");
                     }
                     $(loader).hide();
-                    $('body').removeClass('blurBackground');
+                    $('nav').removeClass('blurBackground');
+                    $('.geekyContainer').removeClass('blurBackground');
+                    $(footerRow).removeClass('blurBackground');
                     setTimeout(function(){ 
                         $.ajax({
                             url: '/deletefile/'+filename
