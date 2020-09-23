@@ -37,7 +37,7 @@ For each of these layouts, we generated an average of 1600 synthetic papers by r
  ## Installation
 
 1. Run ```git@github.com:nbeili/Metadata-extraction-from-German-scientific-papers.git``` to clone this repository.
-2. [Download the model](https://drive.google.com/drive/folders/18ebDDhXFRmxxbL4pXebE3CJuGy_W4hQR?usp=sharing) and copy it to the models/ folder
+2. [Download the model](https://drive.google.com/drive/folders/18ebDDhXFRmxxbL4pXebE3CJuGy_W4hQR?usp=sharing) and copy it to the [models/](models) folder
 3. There are two ways to install the model locally:
 
 ### Docker Deployment
