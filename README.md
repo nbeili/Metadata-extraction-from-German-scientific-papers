@@ -77,12 +77,31 @@ pip install -r requirements.txt detectron2==0.1.3 -f https://dl.fbaipublicfiles.
 ## Getting Started
 
 ### Run a simple demo of the model
-Run below command for prediction on a single PDF document. The demo will store two files at the specified output path: (i) an image of the PDF's first page including bounding boxes for the predictions, (2) a .json file containing the inferred metadata.
+Run below command for prediction on a single PDF document. The demo will store two files at the specified output path: (i) an image of the PDF's first page including bounding boxes for the predictions, (ii) a .json file containing the inferred metadata.
 ```
-python demo/demo.py <path/to/input.pdf> <output/path/> --model-dump <path/to/model.pth> --config-file <path/to/config-file.yaml> --use_cuda <True/False>
+# using the default model configurations and weights and making inferences using the CPU:
+python demo/demo.py <path/to/input.pdf> <output/path/>
+
+# you can also specify the path to the model dump, the configuration file and use CUDA instead of the CPU for faster inference as follows (optional):
+python demo/demo.py <path/to/input.pdf> <output/path/> --model-dump <path/to/model.pth> --config-file <path/to/config-file.yaml> --use_cuda True
 
 # for help run
 python demo/demo.py -h
+```
+
+### In Python
+```
+from pubmex.pubmexinference import *
+
+pubmex = PubMexInference(
+	model_dump="../models/model_final.pth",
+	config_file="../configs/train_config.yaml",
+	use_cuda=False,
+)
+
+# Call the model with a given PDF document; returns a visualization object and a dictionary containing the inferred metadata
+img_array, metadata = pubmex.predict("path/to/document.pdf")
+
 ```
 
 ## Sample results of our Model
