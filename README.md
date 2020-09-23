@@ -9,9 +9,9 @@ Our model extracts nine metadata classes:Title, Author, Journal, Abstract, Affil
 ## Quick Links
 
 - [Data](#data)
-- [Training and Evaluation](#training and evaluation)
+- [Training and Evaluation](#training-and-evaluation)
 - [Installation](#installation)
-- [Sample Results](#sample results of our model)
+- [Sample Results](#sample-results-of-our-model)
 ## Data
 The Data contains around 44K papers with German and English content. 100 of  German scientific papers  randomly selected from available publications in [SSOAR](https://www.gesis.org/ssoar/home) with various layout and style. we extended our dataset by automatically generating synthetic papers based on the 28 most common layouts we identified during the mannual annotation phase. To this end, we randomly extracted metadata records from [SSOAR](https://www.gesis.org/ssoar/home) , [DBLP](https://dblp.org/xml/release/) ,  and a list of scientific affiliations from [Wikipedia](https://de.wikipedia.org/wiki/Liste).
 For each of these layouts, we generated an average of 1600 synthetic papers by randomly inserting metadata from the extracted metadata at their corresponding positions on the first page.
