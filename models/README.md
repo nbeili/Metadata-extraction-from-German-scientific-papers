@@ -1,1 +1,1 @@
-Since the model is too large to be uploaded to GitHub directly, you will have to manually add it to this folder in order to use the model. Please follow the installation instructions.
+Since the model is too large to be uploaded to GitHub directly, you will have to manually add it to this folder in order to use the model. Please follow the installation instructions in [README.md](../README.md).
