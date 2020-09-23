@@ -69,15 +69,21 @@ Note: by default, the web application makes inferences using the CPU. To run the
  - pip >= 20.2.3
 
 ```
-# install the required versions of torch and torchvision
-pip install -U torch==1.5 torchvision==0.6 -f https://download.pytorch.org/whl/cu101/torch_stable.html
 
 # install the necessary dependencies
-pip install -r requirements.txt
-
+pip install -r requirements.txt detectron2==0.1.3 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.5/index.html
 ```
 
 ## Getting Started
+
+### Run a simple demo of the model
+Run below command for prediction on a single PDF document. The demo will store two files at the specified output path: (i) an image of the PDF's first page including bounding boxes for the predictions, (2) a .json file containing the inferred metadata.
+```
+python demo/demo.py <path/to/input.pdf> <output/path/> --model-dump <path/to/model.pth> --config-file <path/to/config-file.yaml> --use_cuda <True/False>
+
+# for help run
+python demo/demo.py -h
+```
 
 ## Sample results of our Model
 | <img src="images/21375_1036.jpeg" width=400> | <img src="images/20011_1311.jpeg" width=400> |
