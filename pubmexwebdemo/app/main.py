@@ -3,8 +3,9 @@ from flask import Flask, flash, Response, request, send_file, redirect, url_for,
 from werkzeug.utils import secure_filename
 from PIL import Image
 import time
+import json
 
-from pubmex.pubmexinference import *
+from pubmex.pubmexinference import PubMexInference
 
 UPLOAD_FOLDER = '/home/appuser/detectron2_repo/app/uploads/'
 ALLOWED_EXTENSIONS = {'pdf'}
