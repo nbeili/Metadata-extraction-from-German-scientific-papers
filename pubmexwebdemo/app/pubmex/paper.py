@@ -356,8 +356,6 @@ class Paper:
           rectangles = sorted([rect for rects in rectangles.values() for rect in rects], key=lambda rect: rect[1])
           if relative_distance_y < 0.1 and relative_distance_x1 < 0.2 and abs(rectangles.index(a) - rectangles.index(b)) == 1:
             # merge the two rectangles
-            print(key)
-            print(abs(rectangles.index(a) - rectangles.index(b)))
             new_rect = fitz.Rect(min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
             merged = True
             #new_rects.append(new_rect)
@@ -402,7 +400,6 @@ class Paper:
         self.metadata["date"] = str(self.metadata[class_name]).strip(punctuation + whitespace)
         try:
           self.metadata["date"] = search_dates(self.metadata["date"])[0][0]
-          print(self.metadata["date"])
         except:
           pass
         
