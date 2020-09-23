@@ -1,13 +1,37 @@
 # Metadata extraction from German scientific papers 
 
-This repository contains  a method of extraction metadata from  German scientific papers (PDF) using  [Detectron2](https://github.com/facebookresearch/detectron2) implementation and synthetic data of German publications. 
-In this project we used an implementation of detectron2 that was trained with 200K images from PublayNet dataset ([model](https://github.com/hpanwar08/detectron2))and we re-finetuned it with 30k of our synthetic data.
+This repository contains  a method of extraction metadata from  German scientific papers (PDF) using  [Detectron2](https://github.com/facebookresearch/detectron2) implementation and synthetic data of German publications.   
+
+In this project we used an implementation of detectron2 that was trained with 200K images from PublayNet dataset ([model](https://github.com/hpanwar08/detectron2))and we re-finetuned it with 30k of our synthetic data.  
+
 Our model extracts nine metadata classes:Title, Author, Journal, Abstract, Affiliation, Email, Address, DOI, Date.
+
 ## Data
+The Data contains around 44K papers with German and English content. 100 of  German scientific papers  randomly selected from available publications in [SSOAR](https://www.gesis.org/ssoar/home) with various layout and style. we extended our dataset by automatically generating synthetic papers based on the 28 most common layouts we identified during the mannual annotation phase. To this end, we randomly extracted metadata records from [SSOAR](https://www.gesis.org/ssoar/home) , [DBLP](https://dblp.org/xml/release/) ,  and a list of scientific affiliations from [Wikipedia](https://de.wikipedia.org/wiki/Liste).
+For each of these layouts, we generated an average of 1600 synthetic papers by randomly inserting metadata from the extracted metadata at their corresponding positions on the first page.
+
+## Training and Evaluation
+### Training configuartion:
+* we froze the stem and the fisrt backbone layer:  `cfg.MODEL.BACKBONE.FREEZE_AT= 2`
+*  learning rate of 0.0025
+* Number of iteration : 15000
+* 70% training, 15% validation, and 15% test data.
+### Final model and config files
+| Architecture                                                                                                                                       | Config file                                                 | Training Script            |
+|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------|--------------------------|
+| [MaskRCNN Resnext101_32x8d FPN 3X](https://drive.google.com/file/d/1Ie1SeTKoqzPH86DN2xPBgEz-3qq6DLoE/view?usp=sharing) | configs/DLA_mask_rcnn_X_101_32x8d_FPN_3x.yaml | ./model_training/Final/detectron2_training_fullData.ipynb |
+
+### Evaluation
+ Dataset                                              |  AP     | AP50   | AP75   | AP Small | AP Medium | AP Large | 
+|------------------------------------------|--------|---------|---------|------------|---------------|------------|
+| Validation set | 90.363 | 95.828 | 95.269 | 74.173 | 81.523 | 95.273|
+|------------------------------------------|--------|---------|---------|------------|---------------|------------|
+|Test set            |90.167 | 95.626 | 94.911 | 75.199 | 81.275 | 79.225|
+
 
  ## Installation
  #### Using google Colaboratory:
- This [colab] (https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)notebook has all the steps and instructions to install Detectron2
+ This [colab](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5) notebook has all the steps and instructions to install Detectron2
  #### Using docker:
  This [dockerfile ](https://github.com/facebookresearch/detectron2/blob/master/docker/Dockerfile) also installs detectron2 with a few simple commands.
  #### Locally
@@ -50,14 +74,13 @@ Our model extracts nine metadata classes:Title, Author, Journal, Abstract, Affil
 
  docker run -it -p 5000:5000 --name mexPubContainer my-mexpub-app:latest
  
+ 5. Hit http://localhost:5000 in the browser to access the appliction. 
+ 
  Note: It takes time to return the predictions
- | <img src="assets/images/1.JPG" width=400> | <img src="assets/images/2.JPG" width=400> |
+ | <img src="images/webApp_1.png" width=400> | <img src="images/webApp_2.png" width=400> |
  |---------------------------------------------------------------------------|---------------------------------------------------------------------------|
 
-
- 5. Hit http://localhost:5000 in the browser to access the appliction. 
-
-## Sample outputs of PubMEX
+## Sample results of our Model
 | <img src="images/21375_1036.jpeg" width=400> | <img src="images/20011_1311.jpeg" width=400> |
 |---------------------------------------------------------------------------|---------------------------------------------------------------------------|
 | <img src="images/11703_510.jpeg" width=400> | <img src="images/11916_950.jpeg" width=400> |
