@@ -1,5 +1,3 @@
-from os.path import expanduser
-
 from pubmex.predictor import *
 
 from pubmex.paper import *
@@ -13,7 +11,7 @@ class PubMexInference:
     PubMex model wrapper
     '''
 
-    def __init__(self, model_dump=expanduser("~/PubMex/models"), config_file=expanduser("~PubMex/configs"), pretrained=True, use_cuda=True, confidence_threshold=0.7):
+    def __init__(self, model_dump="../models/model_final.pth", config_file="../configs/train_config.yaml", pretrained=True, use_cuda=True, confidence_threshold=0.7):
         '''
         :param model_dir: path to the model dump (.pkl-file)
         :param config_path: path to the config file (.yaml-file)
