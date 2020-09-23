@@ -1,5 +1,3 @@
-torch==1.5 -f https://download.pytorch.org/whl/cu101/torch_stable.html
-torchvision==0.6 -f https://download.pytorch.org/whl/cu101/torch_stable.html
 pdf2image==1.14.0
 pymupdf==1.17.7
 pdfplumber==0.5.22

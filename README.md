@@ -71,7 +71,10 @@ Note: by default, the web application makes inferences using the CPU. To run the
 ```
 
 # install the necessary dependencies
-pip install -r requirements.txt detectron2==0.1.3 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.5/index.html
+pip install -r requirements.txt 
+pip install torch==1.5 torchvision==0.6 -f https://download.pytorch.org/whl/cu101/torch_stable.html 
+pip install detectron2==0.1.3 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.5/index.html
+pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
 ```
 
 ## Getting Started
