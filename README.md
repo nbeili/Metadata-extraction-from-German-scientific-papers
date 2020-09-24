@@ -65,6 +65,7 @@ Note: by default, the web application makes inferences using the CPU. To run the
  ### Manual installation
  ##### Requirements:
  - Linux or macOS
+ - Poppler >= 20.09.0 
  - Python ≥ 3.6
  - pip >= 20.2.3
 
@@ -76,6 +77,7 @@ pip install torch==1.5 torchvision==0.6 -f https://download.pytorch.org/whl/cu10
 pip install detectron2==0.1.3 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.5/index.html
 pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
 ```
+Note: Having multiple versions of Python installed in parallel (e.g., Python2 and Python3) can lead to errors related to the pycocotools. It is advisable to use Anaconda and run the installation inside a conda environment to prevent dependency conflicts. 
 
 ## Getting Started
 
