@@ -5,6 +5,8 @@ $(document).ready(function(){
     $(".custom-file-input").on("change", function() {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        $(inputFile).removeClass('is-invalid');
+        $('.custom-file-label').removeClass('custom-file-label-highlight');
     });
 
     $(function() {
@@ -19,9 +21,11 @@ $(document).ready(function(){
             console.log("Calling mexpub with " + filename)
             if(filename == ''){
                 $(inputFile).addClass('is-invalid');
+                $('.custom-file-label').addClass('custom-file-label-highlight');
                 return;
             }else{
                 $(inputFile).removeClass('is-invalid');
+                $('.custom-file-label').removeClass('custom-file-label-highlight');
             }
             clear_data(); //clear data before call
             $.ajax({
@@ -36,6 +40,11 @@ $(document).ready(function(){
                     $('.geekyContainer').addClass('blurBackground');
                     $(footerRow).addClass('blurBackground');
                     $(loader).show();
+                    $('#inputFile').prop("disabled", true);
+                    $('#upload-file-btn').prop("disabled", true);
+                    $("#json-tab").css("pointer-events", "none");
+                    $("#plaintext-tab").css("pointer-events", "none");
+                    $("#geekyLink").css("pointer-events", "none");
                 },
                 success: function(data) {
                     //console.log(data);
@@ -49,6 +58,11 @@ $(document).ready(function(){
                     $('nav').removeClass('blurBackground');
                     $('.geekyContainer').removeClass('blurBackground');
                     $(footerRow).removeClass('blurBackground');
+                    $('#inputFile').prop("disabled", false);
+                    $('#upload-file-btn').prop("disabled", false);
+                    $("#json-tab").css("pointer-events", "auto");
+                    $("#plaintext-tab").css("pointer-events", "auto");
+                    $("#geekyLink").css("pointer-events", "auto");
                     setTimeout(function(){ 
                         $.ajax({
                             url: '/deletefile/'+filename
