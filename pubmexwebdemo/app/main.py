@@ -42,6 +42,18 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            file_saved = False
+            waited = 0
+            while not file_saved:
+                if not os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
+                    time.sleep(1)
+                    waited += 1
+                else:
+                    file_saved = True
+                if waited > 20:
+                    return redirect(request.host_url)
+
             v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename)
             img = Image.fromarray(v.get_image()[:, :, ::-1])
             img_path = "/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg"
@@ -60,10 +72,13 @@ def uploaded_file(filename):
 @app.route('/deletefile/<filename>')
 def delete_file(filename):
     print("remove file")
-    os.remove(app.config['UPLOAD_FOLDER'] + filename)
-    os.remove("/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg")
+    try:
+        os.remove(app.config['UPLOAD_FOLDER'] + filename)
+        os.remove("/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg")
 
-    return redirect(url_for('upload_file', filename=filename))
+        return redirect(url_for('upload_file', filename=filename))  
+    except:
+        pass
 
 
 if __name__ == '__main__':
