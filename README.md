@@ -82,7 +82,7 @@ Note: Having multiple versions of Python installed in parallel (e.g., Python2 an
 ## Getting Started
 
 ### Run a simple demo of the model
-Run below command for prediction on a single PDF document. The demo will store two files at the specified output path: (i) an image of the PDF's first page including bounding boxes for the predictions, (ii) a .json file containing the inferred metadata.
+Run below command from the main repository for prediction on a single PDF document. The demo will store two files at the specified output path: (i) an image of the PDF's first page including bounding boxes for the predictions, (ii) a .json file containing the inferred metadata.
 ```
 # using the default model configurations and weights and making inferences using the CPU:
 python demo/demo.py <path/to/input.pdf> <output/path/>
