@@ -15,6 +15,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
 
+
 pubmex = PubMexInference(
     model_dump='/home/appuser/detectron2_repo/app/models/final/model_final.pth', 
     config_file='/home/appuser/detectron2_repo/app/configs/final/train_config.yaml',
@@ -31,14 +32,22 @@ def index():
 
 @app.route('/uploadpdf', methods=["GET", "POST"])
 def upload_file():
+    output = {}
+
     if request.method == 'POST':
         if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.host_url)
+            output["flash"] = "Please upload a PDF document above!"
+            return Response(json.dumps(output), mimetype='text/json')
+        
         file = request.files['file']
+        print(file.filename)
         if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+            output["flash"] = "Please upload a PDF document above!"
+            return Response(json.dumps(output), mimetype='text/json')
+        if not allowed_file(file.filename):
+            output["flash"] = 'Wrong file format. Please upload a PDF document!'
+            return Response(json.dumps(output), mimetype='text/json')
+            
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -49,32 +58,36 @@ def upload_file():
                 if not os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
                     time.sleep(1)
                     waited += 1
+                    print("waiting")
                 else:
                     file_saved = True
                 if waited > 20:
                     return redirect(request.host_url)
-
-            v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename)
-            img = Image.fromarray(v.get_image()[:, :, ::-1])
-            img_path = "/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg"
-            img.save(img_path)
-            output = {}
-            output["output"] = metadata
-            output["image_path"] = "/static/"+ filename[:-4] + ".jpg"
-            return Response(json.dumps(output), mimetype='text/json')
-    
+            for i in range(3):
+                while True:
+                    try:
+                        v, metadata = pubmex.predict(app.config['UPLOAD_FOLDER'] + filename)
+                        img = Image.fromarray(v.get_image()[:, :, ::-1])
+                        img_path = app.config['UPLOAD_FOLDER'] + filename[:-4] + ".jpg"
+                        img.save(img_path)
+                        output["output"] = metadata
+                        output["image_path"] = app.config['UPLOAD_FOLDER'] + filename[:-4] + ".jpg"
+                        return Response(json.dumps(output), mimetype='text/json')
+                    except:
+                        output["flash"] = "Something went wrong uploading the file - please try again."
+                        if i == 2:
+                            return Response(json.dumps(output), mimetype='text/json')
+                        continue
+                    break
     return render_template("index.html")
 
-"""@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-"""
 @app.route('/deletefile/<filename>')
 def delete_file(filename):
     print("remove file")
+    flash("Deleted file {}".format(filename))
     try:
         os.remove(app.config['UPLOAD_FOLDER'] + filename)
-        os.remove("/home/appuser/detectron2_repo/app/static/" + filename[:-4] + ".jpg")
+        os.remove(app.config['UPLOAD_FOLDER'] + filename[:-4] + ".jpg")
 
         return redirect(url_for('upload_file', filename=filename))  
     except:

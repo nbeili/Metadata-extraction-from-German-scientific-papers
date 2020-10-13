@@ -9,6 +9,10 @@ $(document).ready(function(){
         $('.custom-file-label').removeClass('custom-file-label-highlight');
     });
 
+    $("#flash_button").on("click", function(){
+        $("#flash_js").hide();
+    })
+
     $(function() {
         $('#upload-file-btn').click(function() {
             var form_data = new FormData($('#upload-file')[0]);
@@ -47,10 +51,15 @@ $(document).ready(function(){
                     $("#geekyLink").css("pointer-events", "none");
                 },
                 success: function(data) {
-                    //console.log(data);
-                    if ("output" in data) {
+                    if (typeof data == "object" && "output" in data) {
                         console.log("Setting data")
                         set_data(data)
+                        $.ajax({
+                            url: '/deletefile/'+filename
+                        })
+                    } else if (typeof data == "object" && "flash" in data) {
+                        $("#flash_text").text(data["flash"]);
+                        $("#flash_js").show();
                     } else {
                         $("#displayfilename").html("No metadata for " + filename + ". Please validate the PDF file.");
                     }
@@ -63,12 +72,6 @@ $(document).ready(function(){
                     $("#json-tab").css("pointer-events", "auto");
                     $("#plaintext-tab").css("pointer-events", "auto");
                     $("#geekyLink").css("pointer-events", "auto");
-                    setTimeout(function(){ 
-                        $.ajax({
-                            url: '/deletefile/'+filename
-                        })
-                    }, 10000);
-                    
                 },
             });
         };
@@ -89,48 +92,53 @@ $(document).ready(function(){
         $("#address").hide();
         $("#abstract").hide();
         $("#titledata").hide();
-
+        $("#flash_js").hide();
     }
 
     function set_data(data) {
-        console.log(data["image_path"])
+        
         $("#img").attr("src", data["image_path"])
-        $("#output").html(JSON.stringify(data["output"], null, 5));
-        if ("title" in data["output"]) {
-            $("#titledata").show();
-            $("#title-prediction").text(data["output"]["title"])
+        if (Object.keys(data["output"]).length == 0) {
+            $("#info").text("MexPub did not find any metadata in this document.")
+        } else {
+            $("#info").hide();
+            $("#output").html(JSON.stringify(data["output"], null, 5));
+            if ("title" in data["output"]) {
+                $("#titledata").show();
+                $("#title-prediction").text(data["output"]["title"])
+            };
+            if ("author" in data["output"]) {
+                $("#author").show();
+                $("#author-prediction").text(data["output"]["author"]);
+            };
+            if ("affiliation" in data["output"]) {
+                $("#affiliation").show();
+                $("#affiliation-prediction").text(data["output"]["affiliation"]);
+            };
+            if ("address" in data["output"]) {
+                $("#address").show();
+                $("#address-prediction").text(data["output"]["address"]);
+            };
+            if ("journal" in data["output"]) {
+                $("#journal").show();
+                $("#journal-prediction").text(data["output"]["journal"]);
+            };
+            if ("doi" in data["output"]) {
+                $("#doi").show();
+                $("#doi-prediction").text(data["output"]["doi"]);
+            };
+            if ("abstract" in data["output"]) {
+                $("#abstract").show();
+                $("#abstract-prediction").text(data["output"]["abstract"]);
+            };
+            if ("email" in data["output"]) {
+                $("#email").show();
+                $("#email-prediction").text(data["output"]["email"]);
+            };
+            if ("date" in data["output"]) {
+                $("#date").show();
+                $("#date-prediction").text(data["output"]["date"]);
+            };
         };
-        if ("author" in data["output"]) {
-            $("#author").show();
-            $("#author-prediction").text(data["output"]["author"]);
-        };
-        if ("affiliation" in data["output"]) {
-            $("#affiliation").show();
-            $("#affiliation-prediction").text(data["output"]["affiliation"]);
-        };
-        if ("address" in data["output"]) {
-            $("#address").show();
-            $("#address-prediction").text(data["output"]["address"]);
-        };
-        if ("journal" in data["output"]) {
-            $("#journal").show();
-            $("#journal-prediction").text(data["output"]["journal"]);
-        };
-        if ("doi" in data["output"]) {
-            $("#doi").show();
-            $("#doi-prediction").text(data["output"]["doi"]);
-        };
-        if ("abstract" in data["output"]) {
-            $("#abstract").show();
-            $("#abstract-prediction").text(data["output"]["abstract"]);
-        };
-        if ("email" in data["output"]) {
-            $("#email").show();
-            $("#email-prediction").text(data["output"]["email"]);
-        };
-        if ("date" in data["output"]) {
-            $("#date").show();
-            $("#date-prediction").text(data["output"]["date"]);
-        };
-    };
+    }
 });

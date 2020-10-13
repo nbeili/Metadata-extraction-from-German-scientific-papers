@@ -26,6 +26,7 @@
   </script>
   </head>
   <body>
+    
     <!-- navbar -->
     <nav class="navbar navbar-light navbar-expand">
       <div class="container">
@@ -50,17 +51,12 @@
         </div>
       </div>
     </nav>
-
-    <!-- flashes -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+    
+    <!-- Flash alert -->
+    <div id="flash_js" class="alert alert-danger" role="alert">
+      <button id="flash_button" type="button" class="close" aria-label="Close"><span aria-hidden="true"><span>&times;</span></button>
+      <p id="flash_text"></p>
+    </div>
 
     <!-- main content -->
     <div id="loader" style="display: none;"></div>
@@ -96,6 +92,8 @@
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="plaintext" role="tabpanel" aria-labelledby="plaintext-tab">
+              
+              <p id="info">Please upload a PDF document above to try out MexPub!</p>
               
               <div id="titledata">
                 <div class="prediction-wrapper" id="title-wrapper">
@@ -175,19 +173,19 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="row" id="footerRow">
-        <div class="col-12 col-md-12"  id="about">
-          <p>
-            MexPub is a deep learning system that extracts metadata from PDF documents of scientific publications. Please note that this web demo uses a CPU to make inferences on a given PDF, which can take a few seconds. For faster inference (i.e., less than 100ms), the predictor can be called usinig a GPU. To learn more, please see our <a href="https://github.com/nbeili/Metadata-extraction-from-German-scientific-papers" id="geekyLink">open-source Python code-base</a>
-          </p>
-          <p>
-            This web demo was created by Team Geeky as part of the Machine Learning Application Research Lab at University Koblenz Landau. The research leading to MexPub was carried out by Nada Beili, Arslan Zafar, Prantik Goswami, and Timo Hartmann. The project was supervised by Dr. Zeyd Boukhers.
-          </p>
-        </div>
+          <div class="col-12 col-md-12"  id="about">
+              <p>
+                <b>MexPub</b> is a deep learning system that extracts metadata from PDF documents of scientific publications.</br> Please note that this web demo uses a CPU to make inferences on a given PDF, which can take a few seconds. For faster inference (i.e., less than 100ms), the predictor can be called usinig a GPU. To learn more, please see our <a href="https://github.com/nbeili/Metadata-extraction-from-German-scientific-papers" id="geekyLink">open-source Python code-base</a>.
+              </p>
+              <p>
+                This web demo was created by Team Geeky as part of the Machine Learning Application Research Lab at University Koblenz Landau. The research leading to MexPub was carried out by Nada Beili, Arslan Zafar, Prantik Goswami, and Timo Hartmann.</br>The project was supervised by Dr. Zeyd Boukhers.
+              </p>
+          </div>
       </div>
       <!-- <div>
         <span class="text-muted">© 2020 Copyright: Geeky</span>
       </div> -->
-    </footer>
     <!-- Footer -->
+  </footer>
    
 </body>
