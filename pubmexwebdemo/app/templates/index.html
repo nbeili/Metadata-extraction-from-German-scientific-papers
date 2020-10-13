@@ -51,6 +51,17 @@
       </div>
     </nav>
 
+    <!-- flashes -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <!-- main content -->
     <div id="loader" style="display: none;"></div>
     <div class="overlay"></div>
